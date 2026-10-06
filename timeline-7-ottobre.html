@@ -39,7 +39,17 @@ h1{min-width:0;font:400 clamp(30px,5.4vw,58px)/1.02 var(--f-head);letter-spacing
 @media (max-width:860px){.stage{grid-template-columns:minmax(0,1fr)}}
 .mapbox{position:relative;border:1px solid var(--line);overflow:hidden;background:var(--sea);aspect-ratio:4/3;min-height:300px;box-shadow:0 0 0 1px #000,0 14px 44px rgba(0,0,0,.65)}
 .mapbox::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 90px 18px rgba(0,0,0,.7)}
-@media (max-width:860px){.mapbox{aspect-ratio:5/4;min-height:0}}
+@media (min-width:861px){.mapbox{aspect-ratio:16/10}}
+@media (max-width:860px){
+  .wrap{display:flex;flex-direction:column}
+  .stage{display:contents}
+  .wrap .top{order:0}
+  .wrap .mapbox{order:1;aspect-ratio:16/10;min-height:0;margin-top:18px}
+  .wrap .bar{order:2;margin-top:10px}
+  .wrap .card{order:3;margin-top:10px;min-height:0}
+  .wrap .legend{order:4}.wrap>details{order:5}.wrap .foot{order:6}
+}
+@media (max-width:520px){.wrap .mapbox{aspect-ratio:5/4}}
 #map{position:absolute;inset:0;display:block;width:100%;height:100%}
 #map{touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none}
 #map.grab{cursor:grabbing}
