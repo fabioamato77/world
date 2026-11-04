@@ -99,11 +99,12 @@ async function load(){
     lastSig = sig; render(data); shown = true; postSize();
   }catch(e){ if (!shown) document.getElementById("ts").textContent = "Dati non disponibili"; }
 }
+const P = r => r.p === "dem" ? "d" : r.p === "rep" ? "r" : r.p;   /* il feed scrive dem/rep, qui d/r */
 
 const KIND = "senate";
 function colorOf(r){
   if (!r || !r.g || r.g === "o") return { fill: "var(--none)", txt: "lt" };
-  const flip = r.p && r.g !== r.p && (r.g === "d" || r.g === "r");
+  const flip = P(r) && r.g !== P(r) && (r.g === "d" || r.g === "r");
   const dark = r.c === 1, d = r.g === "d";
   if (flip) return { fill: "url(#" + (d ? (dark ? "hdd" : "hdl") : (dark ? "hr" : "hrl")) + ")", txt: dark ? "on" : "lt", flip: true };
   return { fill: d ? (dark ? "var(--dem)" : "var(--dem-l)") : (dark ? "var(--rep)" : "var(--rep-l)"), txt: dark ? "on" : "lt" };
@@ -111,9 +112,9 @@ function colorOf(r){
 function tipFor(code, races){
   const nm = NAMES[code] || code;
   const rows = races.map(r => {
-    const flip = r.p && r.g && r.g !== r.p && (r.g === "d" || r.g === "r");
+    const flip = P(r) && r.g && r.g !== P(r) && (r.g === "d" || r.g === "r");
     const who = !r.g ? "nessun dato" : (r.c ? "Vince " : "In vantaggio: ") + (r.g === "d" ? '<span class="d">' + (r.dn || "Dem") + '</span>' : r.g === "r" ? '<span class="r">' + (r.rn || "Rep") + '</span>' : "altro");
-    return (r.sp ? "<i>Seggio speciale</i><br>" : "") + who + (r.m != null ? "<br>Margine " + fmtM(r.m) + " · scrutinio " + r.rp + "%" : "") + (flip ? "<br><b style='font-family:inherit;font-size:12px;display:inline'>Passa di mano</b> da " + (r.p === "d" ? "Dem a Rep" : "Rep a Dem") : "");
+    return (r.sp ? "<i>Seggio speciale</i><br>" : "") + who + (r.m != null ? "<br>Margine " + fmtM(r.m) + " · scrutinio " + r.rp + "%" : "") + (flip ? "<br><b style='font-family:inherit;font-size:12px;display:inline'>Passa di mano</b> da " + (P(r) === "d" ? "Dem a Rep" : "Rep a Dem") : "");
   }).join("<hr style='border:0;border-top:1px solid #eee;margin:5px 0'>");
   return "<b>" + nm + "</b>" + rows;
 }
@@ -133,7 +134,7 @@ function render(data){
   }
   const n = a => a.length, d = list.filter(r => r.g === "d").length, r_ = list.filter(r => r.g === "r").length;
   const calls = list.filter(r => r.c).length;
-  const flips = list.filter(r => r.p && r.g && r.g !== r.p && (r.g === "d" || r.g === "r"));
+  const flips = list.filter(r => P(r) && r.g && r.g !== P(r) && (r.g === "d" || r.g === "r"));
   document.getElementById("sum").innerHTML =
     '<div><b class="d">' + d + '</b>Dem vincono o in testa</div><div><b class="r">' + r_ + '</b>Rep vincono o in testa</div>' +
     '<div><b>' + calls + '/' + n(list) + '</b>gare assegnate</div><div><b>' + flips.length + '</b>' + (KIND === "senate" ? "seggi" : "Stati") + ' passati di mano</div>';
