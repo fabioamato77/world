@@ -210,7 +210,10 @@
      ?fonte=testo  cambia la dicitura della fonte nel banner
    ========================================================================== */
 const q = new URLSearchParams(location.search);
-const FEED  = q.get("feed")  || "https://sitmap.live/api/elections/us-2026.json";
+/* 1) file leggero midterm-data.json accanto al banner (aggiornato da GitHub Actions, vedi midterm-data.yml)
+   2) in mancanza, il feed completo di sitmap.live (pesante, ~440 KB) */
+const FEEDS = q.get("feed") ? [q.get("feed")]
+  : [new URL("midterm-data.json", location.href).href, "https://sitmap.live/api/elections/us-2026.json"];
 const FONTE = q.get("fonte") || "Fonte: civicAPI via sitmap.live · non ufficiale";
 const EVERY = Math.max(30, Number(q.get("every")) || 600);   /* default: ogni 10 minuti */
 const CACHE_KEY = "midterm-usa-2026-banner-v2";
@@ -226,6 +229,7 @@ const CH = {
    i 2 indipendenti che votano coi Dem; governatori: inclusi i 14 Stati senza elezione).
    tallies[].leading = in vantaggio, non chiamati. */
 function parse(json){
+  if (json && json.cam && json.sen) return json;   /* file leggero già pronto (midterm-data.json) */
   const out = {};
   for (const [k, c] of Object.entries(CH)){
     const t = (json.tallies || []).find(x => x.chamber === c.id);
@@ -309,23 +313,34 @@ function render(data, stale){
 function readCache(){ try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch(e){ return null; } }
 function writeCache(d){ try { localStorage.setItem(CACHE_KEY, JSON.stringify(d)); } catch(e){} }
 
-let shown = false;
+/* aggiornamento silenzioso: se i numeri non cambiano non si tocca nulla; se la richiesta fallisce restano i dati già a schermo */
+let shown = false, lastSig = "", lastLoad = 0;
+const sig = d => JSON.stringify([d.cam, d.sen, d.gov, d.flips, d.govInfo]);
+async function fetchData(){
+  let err;
+  for (const url of FEEDS){
+    try{
+      const r = await fetch(url, { cache: "no-store" });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const data = parse(await r.json());
+      if (!data.cam || !data.sen) throw new Error("formato inatteso");
+      return data;
+    }catch(e){ err = e; }
+  }
+  throw err;
+}
 async function load(){
+  lastLoad = Date.now();
   try{
-    const r = await fetch(FEED, { cache: "no-store" });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    const data = parse(await r.json());
-    if (!data.cam || !data.sen) throw new Error("formato inatteso");
-    writeCache(data); render(data, false); shown = true;
+    const data = await fetchData();
+    writeCache(data);
+    if (shown && sig(data) === lastSig) return;     /* nessuna novità: tutto resta com'è */
+    lastSig = sig(data); render(data, false); shown = true;
   }catch(e){
-    if (!shown){
-      const c = readCache();
-      if (c){ render(c, true); shown = true; }
-      else document.getElementById("ts").textContent = "Dati non disponibili";
-    } else {
-      const t = document.getElementById("ts");
-      if (!/non aggiornato/.test(t.textContent)) t.textContent += " (non aggiornato)";
-    }
+    if (shown) return;                               /* errore: restano i dati vecchi, senza avvisi */
+    const c = readCache();
+    if (c){ lastSig = sig(c); render(c, true); shown = true; }
+    else document.getElementById("ts").textContent = "Dati non disponibili";
   }
 }
 
@@ -374,7 +389,7 @@ postSize();
 
 load();
 setInterval(() => { if (!document.hidden) load(); }, EVERY * 1000);
-document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
+document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastLoad > EVERY * 1000) load(); });
 </script>
 </body>
 </html>
