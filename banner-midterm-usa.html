@@ -30,9 +30,11 @@
 
   /* colonna di sinistra: logo, titolo, tab */
   .title{flex:0 0 15.5cqw;display:flex;flex-direction:column;justify-content:center;padding-right:1.5cqw}
-  .logo{display:block;height:2.6cqw;width:auto;aspect-ratio:120/53;align-self:flex-start;color:var(--ink);opacity:var(--logo-op)}
-  .title h1{font-family:"Fraunces",serif;font-weight:700;font-size:1.5cqw;line-height:1.1;letter-spacing:-.01em;white-space:nowrap;margin-top:.4cqw}
-  .tabs{display:flex;gap:.4cqw;margin-top:.5cqw}
+  .logo{display:block;height:1.7cqw;width:auto;aspect-ratio:120/53;align-self:flex-start;color:var(--ink);opacity:var(--logo-op)}
+  .title h1{font-family:"Fraunces",serif;font-weight:700;font-size:1.5cqw;line-height:1.1;letter-spacing:-.01em;white-space:nowrap;margin-top:.25cqw}
+  .more{font-family:"Fraunces",serif;font-weight:600;font-size:.95cqw;line-height:1.15;color:var(--ink);text-decoration:none;white-space:nowrap;margin-top:.25cqw;align-self:flex-start}
+  .more:hover,.more:focus-visible{color:var(--dem)}
+  .tabs{display:flex;gap:.4cqw;margin-top:.4cqw}
   .tabs button{font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:.62cqw;letter-spacing:.06em;text-transform:uppercase;
     padding:.28cqw .7cqw;border:1px solid var(--line);border-radius:99px;background:transparent;color:var(--muted);cursor:pointer}
   .tabs button.on{background:var(--ink);border-color:var(--ink);color:#fff}
@@ -79,16 +81,15 @@
   .foot{position:absolute;right:.9cqw;bottom:.15cqw;font-family:"IBM Plex Mono",monospace;font-size:.58cqw;color:var(--muted);display:flex;gap:.9cqw}
   .foot .key b{display:inline-block;width:.7cqw;height:.7cqw;vertical-align:-.05cqw;margin-right:.25cqw;background:var(--ink);opacity:.55}
   .foot .key b.p{opacity:.25}
-  .foot .more{font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:.78cqw;color:var(--ink);text-decoration:underline;text-underline-offset:.18cqw;white-space:nowrap}
-  .foot .more:hover,.foot .more:focus-visible{color:var(--dem)}
 
   /* ---------- mobile (contenitore sotto i 760px): formato 16:9, layout verticale ---------- */
   @container (max-width: 760px){
     .banner{aspect-ratio:16/9;flex-direction:column;justify-content:space-between;gap:1cqw;padding:2.4cqw 3.5cqw 1.1cqw}
-    .title{flex:0 0 auto;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"logo h1" "tabs tabs";
-      align-items:center;column-gap:3cqw;row-gap:1.1cqw;border-right:0;padding:0 0 1.4cqw}
+    .title{flex:0 0 auto;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"logo h1" "logo more" "tabs tabs";
+      align-items:center;column-gap:3cqw;row-gap:.6cqw;border-right:0;padding:0 0 .8cqw}
     .logo{grid-area:logo;height:5.8cqw}
-    .title h1{grid-area:h1;font-size:4.8cqw;margin:0}
+    .title h1{grid-area:h1;font-size:4.8cqw;margin:0;align-self:end}
+    .more{grid-area:more;font-size:3.4cqw;margin:0;align-self:start}
     .tabs{grid-area:tabs;margin:0;gap:1.5cqw}
     .tabs button{flex:1;font-size:2.3cqw;padding:1.1cqw 0;text-align:center}
     .chamber,#flip{flex:0 0 auto;padding-bottom:0}
@@ -106,8 +107,7 @@
     .tick{top:-.8cqw;bottom:-.8cqw}
     .flips{gap:9cqw}
     .foot{position:static;flex-wrap:wrap;gap:.3cqw 2.4cqw;font-size:1.95cqw}
-    .foot .more{font-size:2.6cqw}
-    .foot .key b{width:1.9cqw;height:1.9cqw;margin-right:.7cqw;vertical-align:-.2cqw}
+    .foot .key b{width:1.9cqw;height:1.7cqw;margin-right:.7cqw;vertical-align:-.2cqw}
     #src{flex-basis:100%}
   }
 </style>
@@ -134,7 +134,8 @@
           <path d="M12 35V46M18 35V46M24 35V46M30 35V46M90 35V46M96 35V46M102 35V46M108 35V46"/>
         </g>
       </svg>
-      <h1>Midterm Usa 2026</h1>
+      <h1>Midterm Usa</h1>
+      <a class="more" href="https://www.ilfattoquotidiano.it/2026/11/04/midterm-2026-disfatta-repubblicana-notizie/8559872/" target="_blank" rel="noopener">Tutti i dati e le mappe →</a>
       <div class="tabs" role="tablist">
         <button type="button" role="tab" data-t="cong" class="on" aria-selected="true">Congresso</button>
         <button type="button" role="tab" data-t="gov" aria-selected="false">Governatori</button>
@@ -191,7 +192,6 @@
     </section>
 
     <div class="foot">
-      <a class="more" href="https://www.ilfattoquotidiano.it/2026/11/04/midterm-2026-disfatta-repubblicana-notizie/8559872/" target="_blank" rel="noopener">Tutti i dati e le mappe →</a>
       <span id="ts">Caricamento…</span>
       <span class="key"><b></b>assegnati</span>
       <span class="key"><b class="p"></b>in vantaggio</span>
