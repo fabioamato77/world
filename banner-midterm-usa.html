@@ -206,13 +206,13 @@
    Parametri URL opzionali (utili per iframe):
      ?tab=gov      apre direttamente la tab dei governatori (default: congresso)
      ?feed=URL     usa un altro endpoint con lo stesso formato (es. un proxy tuo)
-     ?every=600    intervallo di aggiornamento in secondi (default 300 = 5 minuti, minimo 30)
+     ?every=300    intervallo di aggiornamento in secondi (default 600 = 10 minuti, minimo 30)
      ?fonte=testo  cambia la dicitura della fonte nel banner
    ========================================================================== */
 const q = new URLSearchParams(location.search);
 const FEED  = q.get("feed")  || "https://sitmap.live/api/elections/us-2026.json";
 const FONTE = q.get("fonte") || "Fonte: civicAPI via sitmap.live · non ufficiale";
-const EVERY = Math.max(30, Number(q.get("every")) || 300);   /* default: ogni 5 minuti */
+const EVERY = Math.max(30, Number(q.get("every")) || 600);   /* default: ogni 10 minuti */
 const CACHE_KEY = "midterm-usa-2026-banner-v2";
 
 const CH = {
