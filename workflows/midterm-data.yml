@@ -1,0 +1,25 @@
+name: Aggiorna dati midterm
+on:
+  schedule:
+    - cron: "*/10 * * * *"     # ogni 10 minuti (GitHub può ritardare di qualche minuto)
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: midterm-data
+  cancel-in-progress: true
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/midterm-data.mjs
+      - name: Commit se ci sono novità
+        run: |
+          git config user.name "midterm-bot"
+          git config user.email "midterm-bot@users.noreply.github.com"
+          git add midterm-data.json
+          git diff --cached --quiet || (git commit -m "Aggiorna dati midterm" && git push)
