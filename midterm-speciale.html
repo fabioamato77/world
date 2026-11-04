@@ -43,10 +43,10 @@
   <header>
     <div class="kick"><b style="background:var(--dem)"></b><b style="background:var(--rep)"></b>Elezioni di metà mandato · 3 novembre 2026</div>
     <h1>Midterm Usa 2026, tutti i risultati</h1>
-    <p class="lead">Camera, Senato e governatori: chi controlla il Congresso, le mappe Stato per Stato, i 435 distretti e quanto si è spostato il voto rispetto al 2024. I dati si aggiornano da soli ogni 10 minuti.</p>
+    <p class="lead">Chi controlla il Congresso, i 435 distretti della Camera, le mappe del Senato e dei governatori Stato per Stato e quanto si è spostato il voto rispetto al 2024. I dati si aggiornano da soli ogni 10 minuti.</p>
   </header>
   <nav><ul id="nav">
-    <li><a href="#seggi" class="on">Seggi</a></li><li><a href="#senato">Senato</a></li><li><a href="#governatori">Governatori</a></li><li><a href="#camera">Camera</a></li><li><a href="#spostamento">Spostamento</a></li>
+    <li><a href="#seggi" class="on">Seggi</a></li><li><a href="#camera">Camera</a></li><li><a href="#senato">Senato</a></li><li><a href="#governatori">Governatori</a></li><li><a href="#spostamento">Spostamento</a></li>
   </ul></nav>
   <main id="main"></main>
   <footer>Fonte: civicAPI via sitmap.live (non ufficiale). I risultati 2024 per distretto sono di <a href="https://the-db.co/presbycd" target="_blank" rel="noopener">The Downballot</a>. Le chiamate dei seggi sono quelle di civicAPI, non dell'Associated Press.</footer>
@@ -54,9 +54,9 @@
 <script>
 const BLOCKS = [
   { id: "seggi",        file: "midterm-seggi.html",        h: 520, t: "Seggi" },
+  { id: "camera",       file: "midterm-camera.html",       h: 760, t: "Camera" },
   { id: "senato",       file: "midterm-senato.html",       h: 820, t: "Senato" },
   { id: "governatori",  file: "midterm-governatori.html",  h: 820, t: "Governatori" },
-  { id: "camera",       file: "midterm-camera.html",       h: 760, t: "Camera" },
   { id: "spostamento",  file: "midterm-spostamento.html",  h: 980, t: "Spostamento rispetto al 2024" }
 ];
 const q = new URLSearchParams(location.search);
