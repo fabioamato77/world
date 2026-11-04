@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Midterm Usa 2026 – Banner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f3ee; --ink:#1a1a1a; --muted:#6b6760; --line:#d9d4ca;
+    --dem:#1d5fa8; --dem-l:#9db9db; --rep:#c23b2e; --rep-l:#e2a49d; --empty:#e4dfd4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:transparent}
+  body{font-family:"IBM Plex Sans",system-ui,sans-serif;color:var(--ink)}
+
+  /* Proporzioni fisse 1280x90, scala con la larghezza dell'iframe (1cqw = 12.8px a 1280px). */
+  .wrap{container-type:inline-size;width:100%;max-width:1280px}
+  .banner{
+    position:relative; width:100%; aspect-ratio:1280/90;
+    background:var(--bg); border:1px solid var(--line);
+    display:flex; align-items:stretch;
+    padding:0 1.9cqw; gap:2.2cqw; overflow:hidden;
+  }
+
+  .title{flex:0 0 14.5cqw;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);padding-right:1.6cqw}
+  .title h1{font-family:"Fraunces",serif;font-weight:700;font-size:1.95cqw;line-height:1.05;letter-spacing:-.01em}
+  .title p{font-family:"IBM Plex Mono",monospace;font-size:.78cqw;color:var(--muted);margin-top:.5cqw;line-height:1.3}
+
+  .chamber{flex:1 1 0;display:flex;flex-direction:column;justify-content:center;min-width:0;padding-bottom:.95cqw}
+  .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.45cqw;gap:1cqw}
+  .head h2{font-family:"Fraunces",serif;font-weight:600;font-size:1.45cqw;display:flex;align-items:center;gap:.7cqw}
+  .head span.meta{font-family:"IBM Plex Mono",monospace;font-size:.75cqw;color:var(--muted)}
+  .pill{display:none;font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:.68cqw;letter-spacing:.05em;text-transform:uppercase;color:#fff;border-radius:99px;padding:.15cqw .7cqw}
+  .pill.d{background:var(--dem)} .pill.r{background:var(--rep)}
+  .pill.on{display:inline-block}
+
+  .row{display:flex;align-items:center;gap:.9cqw}
+  .num{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:2.4cqw;line-height:1;min-width:3.6cqw}
+  .num small{display:block;font-family:"IBM Plex Sans",sans-serif;font-weight:500;font-size:.7cqw;letter-spacing:.08em;margin-bottom:.15cqw}
+  .num em{font-style:normal;font-weight:500;font-size:.85cqw;color:var(--muted);margin-left:.25cqw}
+  .num.d{color:var(--dem);text-align:left}
+  .num.r{color:var(--rep);text-align:right}
+
+  .bar{position:relative;flex:1;height:3.3cqw;background:var(--empty);border-radius:.4cqw;overflow:visible}
+  /* .side copre tutta la barra, così le larghezze in % dei segmenti sono relative alla barra intera */
+  .side{position:absolute;top:0;bottom:0;width:100%;display:flex}
+  .side.l{left:0;border-radius:.4cqw 0 0 .4cqw;overflow:hidden}
+  .side.r{right:0;flex-direction:row-reverse;border-radius:0 .4cqw .4cqw 0;overflow:hidden}
+  .side i{display:block;height:100%;transition:width .5s}
+  .l .s{background:var(--dem)} .l .p{background:var(--dem-l)}
+  .r .s{background:var(--rep)} .r .p{background:var(--rep-l)}
+  .tick{position:absolute;top:-.3cqw;bottom:-.3cqw;width:3px;background:var(--ink);transform:translateX(-1.5px);border-radius:2px;box-shadow:0 0 0 1.5px var(--bg)}
+
+  .foot{position:absolute;right:.9cqw;bottom:.15cqw;font-family:"IBM Plex Mono",monospace;font-size:.58cqw;color:var(--muted);display:flex;gap:.9cqw}
+  .foot .key b{display:inline-block;width:.7cqw;height:.7cqw;vertical-align:-.05cqw;margin-right:.25cqw;background:var(--ink);opacity:.55}
+  .foot .key b.p{opacity:.25}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="banner">
+    <div class="title">
+      <h1>Midterm Usa<br>2026</h1>
+      <p id="ts">Caricamento…</p>
+    </div>
+
+    <section class="chamber" id="cam">
+      <div class="head"><h2>Camera <span class="pill d" data-p="d">Maggioranza Dem</span><span class="pill r" data-p="r">Maggioranza Rep</span></h2><span class="meta">435 seggi · maggioranza 218</span></div>
+      <div class="row">
+        <div class="num d"><small>DEM</small><b data-k="d">–</b><em data-k="dl"></em></div>
+        <div class="bar">
+          <div class="side l"><i class="s"></i><i class="p"></i></div>
+          <div class="side r"><i class="s"></i><i class="p"></i></div>
+          <div class="tick"></div>
+        </div>
+        <div class="num r"><small>REP</small><b data-k="r">–</b><em data-k="rl"></em></div>
+      </div>
+    </section>
+
+    <section class="chamber" id="sen">
+      <div class="head"><h2>Senato <span class="pill d" data-p="d">Maggioranza Dem</span><span class="pill r" data-p="r">Maggioranza Rep</span></h2><span class="meta">100 seggi · maggioranza 51</span></div>
+      <div class="row">
+        <div class="num d"><small>DEM</small><b data-k="d">–</b><em data-k="dl"></em></div>
+        <div class="bar">
+          <div class="side l"><i class="s"></i><i class="p"></i></div>
+          <div class="side r"><i class="s"></i><i class="p"></i></div>
+          <div class="tick"></div>
+        </div>
+        <div class="num r"><small>REP</small><b data-k="r">–</b><em data-k="rl"></em></div>
+      </div>
+    </section>
+
+    <div class="foot">
+      <span class="key"><b></b>assegnati</span>
+      <span class="key"><b class="p"></b>in vantaggio</span>
+      <span id="src"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================================
+   FONTE DATI
+   Feed JSON pubblico (non ufficiale) di sitmap.live, che ripubblica i risultati
+   di civicAPI (uffici elettorali dei singoli Stati). Le chiamate ("assegnati")
+   sono quelle di civicAPI, non dell'AP.
+
+   Parametri URL opzionali (utili per iframe):
+     ?feed=URL     usa un altro endpoint con lo stesso formato (es. un proxy tuo)
+     ?every=600    intervallo di aggiornamento in secondi (default 300 = 5 minuti, minimo 30)
+     ?fonte=testo  cambia la dicitura della fonte nel banner
+   ========================================================================== */
+const q = new URLSearchParams(location.search);
+const FEED  = q.get("feed")  || "https://sitmap.live/api/elections/us-2026.json";
+const FONTE = q.get("fonte") || "Fonte: civicAPI via sitmap.live · non ufficiale";
+const EVERY = Math.max(30, Number(q.get("every")) || 300);   /* default: ogni 5 minuti */
+const CACHE_KEY = "midterm-usa-2026-banner";
+
+const CH = {
+  cam: { id: "house",  total: 435, maj: 218 },
+  sen: { id: "senate", total: 100, maj: 51  }
+};
+
+/* dal JSON ai numeri del banner.
+   tallies[].control = seggi assegnati (Senato: inclusi i senatori non al voto e
+   i 2 indipendenti che votano coi Dem). tallies[].leading = in vantaggio, non chiamati. */
+function parse(json){
+  const out = {};
+  for (const [k, c] of Object.entries(CH)){
+    const t = (json.tallies || []).find(x => x.chamber === c.id);
+    if (!t) continue;
+    out[k] = {
+      d:  t.control?.dem ?? 0,
+      r:  t.control?.rep ?? 0,
+      dl: t.leading?.dem ?? 0,
+      rl: t.leading?.rep ?? 0
+    };
+  }
+  out.when = json.fetchedAt || json.generatedAt || null;
+  return out;
+}
+
+function fmtWhen(iso){
+  if(!iso) return "";
+  const d = new Date(iso);
+  if(isNaN(d)) return "";
+  const day = new Intl.DateTimeFormat("it-IT",{timeZone:"Europe/Rome",day:"numeric",month:"short"}).format(d);
+  const hm  = new Intl.DateTimeFormat("it-IT",{timeZone:"Europe/Rome",hour:"2-digit",minute:"2-digit"}).format(d);
+  return "Agg. " + day + ", " + hm;
+}
+
+function paint(id, v){
+  const c = CH[id], el = document.getElementById(id);
+  const set = (k, txt) => el.querySelector('[data-k="'+k+'"]').textContent = txt;
+  set("d", v.d); set("r", v.r);
+  set("dl", v.dl ? "+" + v.dl : ""); set("rl", v.rl ? "+" + v.rl : "");
+
+  const pct = n => Math.min(100, n / c.total * 100) + "%";
+  const L = el.querySelector(".side.l"), R = el.querySelector(".side.r");
+  L.children[0].style.width = pct(v.d);  L.children[1].style.width = pct(v.dl);
+  R.children[0].style.width = pct(v.r);  R.children[1].style.width = pct(v.rl);
+
+  const tick = el.querySelector(".tick");
+  tick.style.left = (c.maj / c.total * 100) + "%";
+  tick.dataset.l = c.maj;
+
+  el.querySelectorAll(".pill").forEach(p => p.classList.remove("on"));
+  if (v.d >= c.maj) el.querySelector('.pill[data-p="d"]').classList.add("on");
+  else if (v.r >= c.maj) el.querySelector('.pill[data-p="r"]').classList.add("on");
+}
+
+function render(data, stale){
+  if (data.cam) paint("cam", data.cam);
+  if (data.sen) paint("sen", data.sen);
+  document.getElementById("ts").textContent = (fmtWhen(data.when) || "Dati caricati") + (stale ? " (non aggiornato)" : "");
+  document.getElementById("src").textContent = FONTE;
+}
+
+function readCache(){ try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch(e){ return null; } }
+function writeCache(d){ try { localStorage.setItem(CACHE_KEY, JSON.stringify(d)); } catch(e){} }
+
+let shown = false;
+async function load(){
+  try{
+    const r = await fetch(FEED, { cache: "no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const data = parse(await r.json());
+    if (!data.cam || !data.sen) throw new Error("formato inatteso");
+    writeCache(data); render(data, false); shown = true;
+  }catch(e){
+    if (!shown){
+      const c = readCache();
+      if (c){ render(c, true); shown = true; }
+      else document.getElementById("ts").textContent = "Dati non disponibili";
+    } else {
+      const t = document.getElementById("ts");
+      if (!/non aggiornato/.test(t.textContent)) t.textContent += " (non aggiornato)";
+    }
+  }
+}
+
+load();
+setInterval(() => { if (!document.hidden) load(); }, EVERY * 1000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
+</script>
+</body>
+</html>
