@@ -21,7 +21,7 @@
   .wrap{container-type:inline-size;width:100%;max-width:1280px}
   .banner{
     position:relative; width:100%; aspect-ratio:1280/90;
-    background:var(--bg); border:1px solid var(--line);
+    background:var(--bg);
     display:flex; align-items:stretch;
     padding:0 1.9cqw; gap:2.2cqw; overflow:hidden;
   }
@@ -29,7 +29,7 @@
   .banner[data-tab="gov"]  .v-cong{display:none}
 
   /* colonna di sinistra: logo, titolo, tab */
-  .title{flex:0 0 15.5cqw;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);padding-right:1.5cqw}
+  .title{flex:0 0 15.5cqw;display:flex;flex-direction:column;justify-content:center;padding-right:1.5cqw}
   .logo{display:block;height:2.6cqw;width:auto;aspect-ratio:120/53;align-self:flex-start;color:var(--ink);opacity:var(--logo-op)}
   .title h1{font-family:"Fraunces",serif;font-weight:700;font-size:1.5cqw;line-height:1.1;letter-spacing:-.01em;white-space:nowrap;margin-top:.4cqw}
   .tabs{display:flex;gap:.4cqw;margin-top:.5cqw}
@@ -84,7 +84,7 @@
   @container (max-width: 760px){
     .banner{aspect-ratio:16/9;flex-direction:column;justify-content:space-between;gap:1cqw;padding:2.4cqw 3.5cqw 1.1cqw}
     .title{flex:0 0 auto;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"logo h1" "tabs tabs";
-      align-items:center;column-gap:3cqw;row-gap:1.1cqw;border-right:0;border-bottom:1px solid var(--line);padding:0 0 1.4cqw}
+      align-items:center;column-gap:3cqw;row-gap:1.1cqw;border-right:0;padding:0 0 1.4cqw}
     .logo{grid-area:logo;height:5.8cqw}
     .title h1{grid-area:h1;font-size:4.8cqw;margin:0}
     .tabs{grid-area:tabs;margin:0;gap:1.5cqw}
