@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Camera Usa – spostamento del voto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--ink:#1a1a1a;--muted:#6b6b6b;--line:#e3e3e3;--dem:#1d5fa8;--dem-l:#9db9db;--rep:#c23b2e;--rep-l:#e2a49d;--oth:#7a7a7a;--none:#e8e8e8;--off:#f1f1f1}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg)}
+  body{font-family:"IBM Plex Sans",system-ui,sans-serif;color:var(--ink)}
+  .box{max-width:820px;margin:0 auto;padding:14px 12px 10px}
+  h1{font-family:"Fraunces",serif;font-weight:700;font-size:clamp(19px,4.4vw,26px);line-height:1.1;letter-spacing:-.01em}
+  .sub{font-size:clamp(12px,2.8vw,14px);color:var(--muted);margin-top:4px;line-height:1.35}
+  .mono{font-family:"IBM Plex Mono",monospace}
+  .sum{display:flex;gap:18px;flex-wrap:wrap;margin:12px 0 6px}
+  .sum div{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);line-height:1.25}
+  .sum b{display:block;font-size:clamp(22px,6vw,30px);font-weight:600;color:var(--ink);line-height:1.05}
+  .sum b.d{color:var(--dem)} .sum b.r{color:var(--rep)}
+  .legend{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin:8px 0 2px;align-items:center}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-2px;margin-right:5px}
+  .foot{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);margin-top:10px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:8px}
+  .tip{position:fixed;z-index:9;pointer-events:none;background:#fff;border:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.14);border-radius:6px;padding:8px 10px;font-size:12px;line-height:1.35;max-width:230px;display:none}
+  .tip b{font-family:"Fraunces",serif;font-size:14px;display:block;margin-bottom:2px}
+  .tip .d{color:var(--dem);font-weight:600} .tip .r{color:var(--rep);font-weight:600}
+  @media (prefers-reduced-motion:no-preference){.fadein{animation:fi .6s both}@keyframes fi{from{opacity:0}to{opacity:1}}}
+
+  svg{width:100%;height:auto;display:block;touch-action:manipulation}
+  .ax{stroke:#d5d5d5;stroke-width:1} .gl{stroke:#f0f0f0;stroke-width:1}
+  .tk{font:500 11px "IBM Plex Mono",monospace;fill:#8a8a8a}
+  .al{font:600 11.5px "IBM Plex Sans",sans-serif;fill:#6b6b6b}
+  .dg{stroke:var(--ink);stroke-width:1.4;stroke-dasharray:5 4;fill:none}
+  .pt{stroke:#fff;stroke-width:.8;cursor:pointer;transition:r .15s}
+  .pt:hover{stroke:var(--ink);stroke-width:1.6}
+  .note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.45}
+  .note a{color:inherit}
+
+</style>
+</head>
+<body>
+<div class="box fadein">
+  <h1>Quanto si è spostato il voto rispetto al 2024</h1>
+  <p class="sub">Ogni punto è un distretto della Camera con scrutinio quasi concluso. Sull'asse orizzontale il margine alle presidenziali 2024 (Harris − Trump), su quello verticale il margine di oggi (candidato Dem − Rep). Sopra la linea tratteggiata il distretto si è spostato verso i Dem, sotto verso i Rep.</p>
+  <div class="sum" id="sum"></div>
+  <svg id="sv" viewBox="0 0 760 520" role="img" aria-label="Spostamento del voto per distretto rispetto al 2024"></svg>
+  <div class="legend"><span><i style="background:var(--dem)"></i>vince il Dem</span><span><i style="background:var(--rep)"></i>vince il Rep</span><span><i style="background:var(--none)"></i>non assegnato (più chiaro)</span></div>
+  <p class="note">Si confrontano due elezioni diverse: nel 2024 la presidenziale, oggi la Camera, quindi contano anche i candidati locali. Sono esclusi i distretti dove corre un solo partito maggiore. I risultati 2024 sono ricalcolati sui confini in vigore nel 2026. Dati 2024: <a href="https://the-db.co/presbycd" target="_blank" rel="noopener">The Downballot</a>.</p>
+  <div class="foot"><span id="ts">Caricamento…</span><span id="src"></span></div>
+</div>
+<div class="tip" id="tip"></div>
+<script>
+const q = new URLSearchParams(location.search);
+const EVERY = Math.max(30, Number(q.get("every")) || 600);
+const FONTE = q.get("fonte") || "Fonte: civicAPI via sitmap.live · non ufficiale";
+const NAMES = {"AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "DC": "Distretto di Columbia", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "Nuovo Messico", "NY": "New York", "NC": "Carolina del Nord", "ND": "Dakota del Nord", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "Carolina del Sud", "SD": "Dakota del Sud", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "Virginia Occidentale", "WI": "Wisconsin", "WY": "Wyoming"};
+function fmtWhen(iso){ if(!iso) return ""; const d = new Date(iso); if(isNaN(d)) return "";
+  const f = (o) => new Intl.DateTimeFormat("it-IT", Object.assign({timeZone:"Europe/Rome"}, o)).format(d);
+  return "Agg. " + f({day:"numeric",month:"short"}) + ", " + f({hour:"2-digit",minute:"2-digit"}); }
+const fmtM = m => m == null ? "–" : (m >= 0 ? "D+" : "R+") + Math.abs(m).toFixed(1).replace(".", ",");
+const tip = document.getElementById("tip");
+function showTip(html, ev){ tip.innerHTML = html; tip.style.display = "block"; moveTip(ev); }
+function moveTip(ev){ const w = tip.offsetWidth, h = tip.offsetHeight; let x = ev.clientX + 14, y = ev.clientY + 14;
+  if (x + w > innerWidth - 6) x = ev.clientX - w - 14; if (y + h > innerHeight - 6) y = ev.clientY - h - 14;
+  tip.style.left = Math.max(4, x) + "px"; tip.style.top = Math.max(4, y) + "px"; }
+function hideTip(){ tip.style.display = "none"; }
+function postSize(){ try{ const h = Math.ceil(document.querySelector(".box").getBoundingClientRect().height);
+  if (window.parent !== window) window.parent.postMessage({ midtermBanner:true, block:"spostamento", height:h }, "*"); }catch(e){} }
+if (window.ResizeObserver) new ResizeObserver(postSize).observe(document.querySelector(".box"));
+/* caricamento silenzioso: se non cambia nulla non si ridisegna; se fallisce restano i dati già a schermo */
+const SRC = q.get("feed") || new URL("midterm-details.json", location.href).href;
+let lastSig = "", lastLoad = 0, shown = false;
+async function load(){
+  lastLoad = Date.now();
+  try{
+    const r = await fetch(SRC, { cache: "no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const data = await r.json();
+    const sig = JSON.stringify(data, (k, v) => k === "when" ? undefined : v);
+    if (shown && sig === lastSig) return;
+    lastSig = sig; render(data); shown = true; postSize();
+  }catch(e){ if (!shown) document.getElementById("ts").textContent = "Dati non disponibili"; }
+}
+
+const W = 760, H = 520, L = 52, R = 14, T = 12, B = 44, LIM = 80;
+const X = v => L + (Math.max(-LIM, Math.min(LIM, v)) + LIM) / (2 * LIM) * (W - L - R);
+const Y = v => T + (1 - (Math.max(-LIM, Math.min(LIM, v)) + LIM) / (2 * LIM)) * (H - T - B);
+const med = a => { const s = [...a].sort((x, y) => x - y), n = s.length; return n ? (n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2) : 0; };
+const fmt1 = v => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(1).replace(".", ",");
+function tipFor(r){
+  const sh = r.m - r.p24;
+  return "<b>" + (NAMES[r.s] || r.s) + " " + (r.n === "AL" ? "(unico)" : parseInt(r.n, 10)) + "</b>2024 presidenziali: " + fmtM(r.p24) + "<br>Camera oggi: " + fmtM(r.m) +
+    "<br><b style='font-family:inherit;font-size:12px;display:inline'>Spostamento " + (sh >= 0 ? "verso i Dem" : "verso i Rep") + " di " + Math.abs(sh).toFixed(1).replace(".", ",") + " punti</b>";
+}
+function render(data){
+  const rs = data.house.filter(r => r.p24 != null && r.m != null && !r.u && r.g && (r.c || r.rp >= 95));
+  const svg = document.getElementById("sv"); let h = "";
+  for (let v = -80; v <= 80; v += 20){
+    h += '<line class="' + (v === 0 ? "ax" : "gl") + '" x1="' + X(v) + '" y1="' + T + '" x2="' + X(v) + '" y2="' + (H - B) + '"/>' +
+         '<line class="' + (v === 0 ? "ax" : "gl") + '" x1="' + L + '" y1="' + Y(v) + '" x2="' + (W - R) + '" y2="' + Y(v) + '"/>' +
+         '<text class="tk" x="' + X(v) + '" y="' + (H - B + 16) + '" text-anchor="middle">' + (v > 0 ? "+" : "") + v + '</text>' +
+         '<text class="tk" x="' + (L - 7) + '" y="' + (Y(v) + 4) + '" text-anchor="end">' + (v > 0 ? "+" : "") + v + '</text>';
+  }
+  h += '<line class="dg" x1="' + X(-LIM) + '" y1="' + Y(-LIM) + '" x2="' + X(LIM) + '" y2="' + Y(LIM) + '"/>';
+  h += '<text class="al" x="' + (L + 8) + '" y="' + (T + 16) + '" fill="#1d5fa8" style="fill:var(--dem)">↑ più Dem del 2024</text>';
+  h += '<text class="al" x="' + (W - R - 8) + '" y="' + (H - B - 10) + '" text-anchor="end" style="fill:var(--rep)">più Rep del 2024 ↓</text>';
+  h += '<text class="al" x="' + ((L + W - R) / 2) + '" y="' + (H - 6) + '" text-anchor="middle">Margine alle presidenziali 2024 (D+ a destra: Dem avanti)</text>';
+  h += '<text class="al" transform="translate(13 ' + ((T + H - B) / 2) + ') rotate(-90)" text-anchor="middle">Margine Camera oggi</text>';
+  rs.forEach((r, i) => {
+    const fill = r.g === "d" ? (r.c ? "var(--dem)" : "var(--dem-l)") : r.g === "r" ? (r.c ? "var(--rep)" : "var(--rep-l)") : "var(--oth)";
+    h += '<circle class="pt" data-i="' + i + '" cx="' + X(r.p24).toFixed(1) + '" cy="' + Y(r.m).toFixed(1) + '" r="4.4" style="fill:' + fill + '"/>';
+  });
+  svg.innerHTML = h;
+  svg.querySelectorAll(".pt").forEach(el => { const r = rs[+el.dataset.i];
+    el.onmousemove = ev => showTip(tipFor(r), ev); el.onmouseleave = hideTip;
+    el.ontouchstart = ev => { showTip(tipFor(r), ev.touches[0]); setTimeout(hideTip, 3000); }; });
+  const sh = rs.map(r => r.m - r.p24), toD = sh.filter(v => v > 0).length;
+  const flip = rs.filter(r => (r.m > 0) !== (r.p24 > 0));
+  const dTrump = flip.filter(r => r.m > 0).length, rHar = flip.filter(r => r.m < 0).length;
+  document.getElementById("sum").innerHTML =
+    '<div><b class="' + (med(sh) >= 0 ? "d" : "r") + '">' + fmt1(med(sh)) + '</b>spostamento mediano (punti, + = verso i Dem)</div>' +
+    '<div><b>' + toD + ' / ' + (rs.length - toD) + '</b>distretti verso i Dem / verso i Rep</div>' +
+    '<div><b class="d">' + dTrump + '</b>vinti dai Dem dove aveva vinto Trump</div><div><b class="r">' + rHar + '</b>vinti dai Rep dove aveva vinto Harris</div>';
+  document.getElementById("ts").textContent = (fmtWhen(data.when) || "Dati caricati") + " · " + rs.length + " distretti nel grafico";
+  document.getElementById("src").textContent = FONTE;
+}
+
+load();
+setInterval(() => { if (!document.hidden) load(); }, EVERY * 1000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastLoad > EVERY * 1000) load(); });
+</script>
+</body>
+</html>

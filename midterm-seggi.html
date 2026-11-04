@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seggi Usa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#fff;--ink:#1a1a1a;--muted:#6b6b6b;--line:#e3e3e3;--dem:#1d5fa8;--dem-l:#9db9db;--rep:#c23b2e;--rep-l:#e2a49d;--oth:#7a7a7a;--none:#e8e8e8;--off:#f1f1f1}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg)}
+  body{font-family:"IBM Plex Sans",system-ui,sans-serif;color:var(--ink)}
+  .box{max-width:820px;margin:0 auto;padding:14px 12px 10px}
+  h1{font-family:"Fraunces",serif;font-weight:700;font-size:clamp(19px,4.4vw,26px);line-height:1.1;letter-spacing:-.01em}
+  .sub{font-size:clamp(12px,2.8vw,14px);color:var(--muted);margin-top:4px;line-height:1.35}
+  .mono{font-family:"IBM Plex Mono",monospace}
+  .sum{display:flex;gap:18px;flex-wrap:wrap;margin:12px 0 6px}
+  .sum div{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);line-height:1.25}
+  .sum b{display:block;font-size:clamp(22px,6vw,30px);font-weight:600;color:var(--ink);line-height:1.05}
+  .sum b.d{color:var(--dem)} .sum b.r{color:var(--rep)}
+  .legend{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:11.5px;color:var(--muted);margin:8px 0 2px;align-items:center}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-2px;margin-right:5px}
+  .foot{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);margin-top:10px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:8px}
+  .tip{position:fixed;z-index:9;pointer-events:none;background:#fff;border:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.14);border-radius:6px;padding:8px 10px;font-size:12px;line-height:1.35;max-width:230px;display:none}
+  .tip b{font-family:"Fraunces",serif;font-size:14px;display:block;margin-bottom:2px}
+  .tip .d{color:var(--dem);font-weight:600} .tip .r{color:var(--rep);font-weight:600}
+  @media (prefers-reduced-motion:no-preference){.fadein{animation:fi .6s both}@keyframes fi{from{opacity:0}to{opacity:1}}}
+
+  .rowc{margin:16px 0 0}
+  .head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .head h2{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(17px,3.8vw,21px);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .head .meta{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted)}
+  .pill{display:none;font-weight:600;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;border-radius:99px;padding:2px 10px}
+  .pill.on{display:inline-block} .pill.d{background:var(--dem)} .pill.r{background:var(--rep)}
+  .line{display:flex;align-items:center;gap:10px;margin-top:6px}
+  .num{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:clamp(26px,7vw,40px);line-height:1;width:3.1ch;flex:none}
+  .num.d{color:var(--dem)} .num.r{color:var(--rep);text-align:right}
+  .num small{display:block;font-family:"IBM Plex Sans",sans-serif;font-weight:500;font-size:10.5px;letter-spacing:.08em;margin-bottom:3px}
+  .num em{font-style:normal;font-weight:500;font-size:12px;color:var(--muted);display:block;margin-top:3px}
+  .bar{position:relative;flex:1;height:clamp(26px,6vw,38px);background:var(--none);border-radius:5px}
+  .side{position:absolute;top:0;bottom:0;width:100%;display:flex;overflow:hidden}
+  .side.l{left:0;border-radius:5px 0 0 5px} .side.r{right:0;flex-direction:row-reverse;border-radius:0 5px 5px 0}
+  .side i{display:block;height:100%;transition:width .9s cubic-bezier(.2,.7,.2,1)}
+  .l .s{background:var(--dem)} .l .p{background:var(--dem-l)} .r .s{background:var(--rep)} .r .p{background:var(--rep-l)}
+  .tick{position:absolute;top:-5px;bottom:-5px;width:3px;background:var(--ink);border-radius:2px;transform:translateX(-1.5px);box-shadow:0 0 0 1.5px #fff;z-index:2}
+  .tick::after{content:attr(data-l);position:absolute;top:100%;left:50%;transform:translateX(-50%);font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);margin-top:2px}
+  .rowc{padding-bottom:12px}
+  @media (prefers-reduced-motion:reduce){.side i{transition:none}}
+
+</style>
+</head>
+<body>
+<div class="box fadein">
+  <h1>Chi controlla il Congresso</h1>
+  <p class="sub">Seggi assegnati a ciascun partito. La parte più chiara è in vantaggio ma non ancora assegnata.</p>
+<section class="rowc" id="cam" data-total="435" data-maj="218">
+    <div class="head"><h2>Camera <span class="pill d" data-p="d">Maggioranza Dem</span><span class="pill r" data-p="r">Maggioranza Rep</span></h2><span class="meta">435 seggi · maggioranza 218</span></div>
+    <div class="line"><div class="num d"><small>DEM</small><b data-k="d">–</b><em data-k="dl"></em></div>
+      <div class="bar"><div class="side l"><i class="s"></i><i class="p"></i></div><div class="side r"><i class="s"></i><i class="p"></i></div><div class="tick"></div></div>
+      <div class="num r"><small>REP</small><b data-k="r">–</b><em data-k="rl"></em></div></div>
+  </section><section class="rowc" id="sen" data-total="100" data-maj="51">
+    <div class="head"><h2>Senato <span class="pill d" data-p="d">Maggioranza Dem</span><span class="pill r" data-p="r">Maggioranza Rep</span></h2><span class="meta">100 seggi · maggioranza 51</span></div>
+    <div class="line"><div class="num d"><small>DEM</small><b data-k="d">–</b><em data-k="dl"></em></div>
+      <div class="bar"><div class="side l"><i class="s"></i><i class="p"></i></div><div class="side r"><i class="s"></i><i class="p"></i></div><div class="tick"></div></div>
+      <div class="num r"><small>REP</small><b data-k="r">–</b><em data-k="rl"></em></div></div>
+  </section><section class="rowc" id="gov" data-total="50" data-maj="26">
+    <div class="head"><h2>Governatori <span class="pill d" data-p="d">Maggioranza Dem</span><span class="pill r" data-p="r">Maggioranza Rep</span></h2><span class="meta">50 seggi · maggioranza 26</span></div>
+    <div class="line"><div class="num d"><small>DEM</small><b data-k="d">–</b><em data-k="dl"></em></div>
+      <div class="bar"><div class="side l"><i class="s"></i><i class="p"></i></div><div class="side r"><i class="s"></i><i class="p"></i></div><div class="tick"></div></div>
+      <div class="num r"><small>REP</small><b data-k="r">–</b><em data-k="rl"></em></div></div>
+  </section>
+  <div class="legend"><span><i style="background:var(--dem)"></i><i style="background:var(--rep)"></i>assegnati</span><span><i style="background:var(--dem-l)"></i><i style="background:var(--rep-l)"></i>in vantaggio</span></div>
+  <p class="sub" style="margin-top:6px;font-size:12px">Senato: compresi i senatori non al voto e i due indipendenti che votano con i Dem. Governatori: compresi i 14 Stati dove non si vota.</p>
+  <div class="foot"><span id="ts">Caricamento…</span><span id="src"></span></div>
+</div>
+<div class="tip" id="tip"></div>
+<script>
+const q = new URLSearchParams(location.search);
+const EVERY = Math.max(30, Number(q.get("every")) || 600);
+const FONTE = q.get("fonte") || "Fonte: civicAPI via sitmap.live · non ufficiale";
+const NAMES = {"AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "DC": "Distretto di Columbia", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "Nuovo Messico", "NY": "New York", "NC": "Carolina del Nord", "ND": "Dakota del Nord", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "Carolina del Sud", "SD": "Dakota del Sud", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "Virginia Occidentale", "WI": "Wisconsin", "WY": "Wyoming"};
+function fmtWhen(iso){ if(!iso) return ""; const d = new Date(iso); if(isNaN(d)) return "";
+  const f = (o) => new Intl.DateTimeFormat("it-IT", Object.assign({timeZone:"Europe/Rome"}, o)).format(d);
+  return "Agg. " + f({day:"numeric",month:"short"}) + ", " + f({hour:"2-digit",minute:"2-digit"}); }
+const fmtM = m => m == null ? "–" : (m >= 0 ? "D+" : "R+") + Math.abs(m).toFixed(1).replace(".", ",");
+const tip = document.getElementById("tip");
+function showTip(html, ev){ tip.innerHTML = html; tip.style.display = "block"; moveTip(ev); }
+function moveTip(ev){ const w = tip.offsetWidth, h = tip.offsetHeight; let x = ev.clientX + 14, y = ev.clientY + 14;
+  if (x + w > innerWidth - 6) x = ev.clientX - w - 14; if (y + h > innerHeight - 6) y = ev.clientY - h - 14;
+  tip.style.left = Math.max(4, x) + "px"; tip.style.top = Math.max(4, y) + "px"; }
+function hideTip(){ tip.style.display = "none"; }
+function postSize(){ try{ const h = Math.ceil(document.querySelector(".box").getBoundingClientRect().height);
+  if (window.parent !== window) window.parent.postMessage({ midtermBanner:true, block:"seggi", height:h }, "*"); }catch(e){} }
+if (window.ResizeObserver) new ResizeObserver(postSize).observe(document.querySelector(".box"));
+/* caricamento silenzioso: se non cambia nulla non si ridisegna; se fallisce restano i dati già a schermo */
+const SRC = q.get("feed") || new URL("midterm-data.json", location.href).href;
+let lastSig = "", lastLoad = 0, shown = false;
+async function load(){
+  lastLoad = Date.now();
+  try{
+    const r = await fetch(SRC, { cache: "no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const data = await r.json();
+    const sig = JSON.stringify(data, (k, v) => k === "when" ? undefined : v);
+    if (shown && sig === lastSig) return;
+    lastSig = sig; render(data); shown = true; postSize();
+  }catch(e){ if (!shown) document.getElementById("ts").textContent = "Dati non disponibili"; }
+}
+
+function paint(id, v){
+  const el = document.getElementById(id), total = +el.dataset.total, maj = +el.dataset.maj;
+  const set = (k, t) => el.querySelector('[data-k="' + k + '"]').textContent = t;
+  set("d", v.d); set("r", v.r); set("dl", v.dl ? "+" + v.dl : ""); set("rl", v.rl ? "+" + v.rl : "");
+  const pct = n => Math.min(100, n / total * 100) + "%";
+  const L = el.querySelector(".side.l"), R = el.querySelector(".side.r");
+  L.children[0].style.width = pct(v.d); L.children[1].style.width = pct(v.dl);
+  R.children[0].style.width = pct(v.r); R.children[1].style.width = pct(v.rl);
+  const tk = el.querySelector(".tick"); tk.style.left = (maj / total * 100) + "%"; tk.dataset.l = maj;
+  el.querySelectorAll(".pill").forEach(p => p.classList.remove("on"));
+  if (v.d >= maj) el.querySelector('.pill[data-p="d"]').classList.add("on"); else if (v.r >= maj) el.querySelector('.pill[data-p="r"]').classList.add("on");
+}
+function render(data){
+  void document.body.offsetWidth;
+  ["cam", "sen", "gov"].forEach(k => data[k] && paint(k, data[k]));
+  document.getElementById("ts").textContent = fmtWhen(data.when) || "Dati caricati";
+  document.getElementById("src").textContent = FONTE;
+}
+
+load();
+setInterval(() => { if (!document.hidden) load(); }, EVERY * 1000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - lastLoad > EVERY * 1000) load(); });
+</script>
+</body>
+</html>
