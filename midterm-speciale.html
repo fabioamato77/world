@@ -10,93 +10,112 @@
 <style>
   :root{--bg:#fff;--ink:#1a1a1a;--muted:#6b6b6b;--line:#e3e3e3;--dem:#1d5fa8;--rep:#c23b2e}
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif}
+  html,body{background:var(--bg)}
+  body{color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif}
   .page{max-width:860px;margin:0 auto}
-  header{padding:22px 14px 8px}
-  .kick{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .kick b{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
-  h1{font-family:"Fraunces",serif;font-weight:700;font-size:clamp(26px,6.4vw,40px);line-height:1.05;letter-spacing:-.015em;margin-top:8px}
-  .lead{font-size:clamp(14px,3.3vw,16.5px);line-height:1.45;color:#444;margin-top:10px;max-width:640px}
-  nav{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);margin-top:14px}
-  nav ul{list-style:none;display:flex;gap:6px;overflow-x:auto;padding:9px 14px;scrollbar-width:none}
-  nav ul::-webkit-scrollbar{display:none}
-  nav a{white-space:nowrap;text-decoration:none;font-weight:600;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);border:1px solid #d6d6d6;border-radius:99px;padding:6px 13px;display:block}
-  nav a.on{background:var(--ink);border-color:var(--ink);color:#fff}
-  section{scroll-margin-top:56px;padding:0 2px}
-  iframe{display:block;width:100%;border:0;background:#fff}
-  .sep{height:1px;background:var(--line);margin:8px 14px}
-  .ed{display:none;align-items:center;gap:8px;padding:6px 14px;font:500 12px "IBM Plex Mono",monospace;color:var(--muted)}
-  .editor .ed{display:flex}
-  .ed button,.edbar button{font:600 11.5px "IBM Plex Sans",sans-serif;border:1px solid #cfcfcf;background:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;color:var(--ink)}
-  .ed button:hover,.edbar button:hover{background:#f4f4f4}
-  .edbar{display:none;padding:8px 14px;background:#fffbe8;border-bottom:1px solid #eadf9c;font-size:12.5px;gap:10px;align-items:center;flex-wrap:wrap}
+  .head{display:flex;align-items:baseline;gap:10px;padding:12px 14px 0;flex-wrap:wrap}
+  .head h1{font-family:"Fraunces",serif;font-weight:700;font-size:clamp(17px,4.6vw,22px);letter-spacing:-.01em;line-height:1.1}
+  .head span{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  .head.off{display:none}
+  .tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;scrollbar-width:none;border-bottom:1px solid var(--line)}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs button{flex:none;font:600 12px "IBM Plex Sans",sans-serif;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:#fff;border:1px solid #d6d6d6;border-radius:99px;padding:7px 14px;cursor:pointer;transition:background .15s,color .15s}
+  .tabs button:hover{background:#f4f4f4}
+  .tabs button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .tabs button:focus-visible{outline:2px solid var(--dem);outline-offset:2px}
+  .panes{position:relative}
+  iframe{display:none;width:100%;border:0;background:#fff}
+  iframe.on{display:block;animation:fi .35s both}
+  @keyframes fi{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){iframe.on{animation:none}}
+  .edbar{display:none;padding:7px 14px;background:#fffbe8;border-bottom:1px solid #eadf9c;font-size:12px;gap:8px;align-items:center;flex-wrap:wrap}
   .editor .edbar{display:flex}
-  footer{padding:14px 14px 40px;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);line-height:1.5}
-  footer a{color:inherit}
+  .edbar button{font:600 11.5px "IBM Plex Sans",sans-serif;border:1px solid #cfcfcf;background:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;color:var(--ink)}
+  .edbar button:hover{background:#f4f4f4}
 </style>
 </head>
 <body>
 <div class="page" id="pg">
-  <div class="edbar"><b>Modalità redazione.</b> Ogni blocco ha il suo pulsante “Copia iframe”. Nella pagina dell'articolo incolla una sola volta lo script per l'altezza:
-    <button id="cpScript">Copia script altezza</button><span id="cpMsg"></span></div>
-  <header>
-    <div class="kick"><b style="background:var(--dem)"></b><b style="background:var(--rep)"></b>Elezioni di metà mandato · 3 novembre 2026</div>
-    <h1>Midterm Usa 2026, tutti i risultati</h1>
-    <p class="lead">Chi controlla il Congresso, i 435 distretti della Camera, le mappe del Senato e dei governatori Stato per Stato e quanto si è spostato il voto rispetto al 2024. I dati si aggiornano da soli ogni 10 minuti.</p>
-  </header>
-  <nav><ul id="nav">
-    <li><a href="#seggi" class="on">Seggi</a></li><li><a href="#camera">Camera</a></li><li><a href="#senato">Senato</a></li><li><a href="#governatori">Governatori</a></li><li><a href="#spostamento">Spostamento</a></li>
-  </ul></nav>
-  <main id="main"></main>
-  <footer>Fonte: civicAPI via sitmap.live (non ufficiale). I risultati 2024 per distretto sono di <a href="https://the-db.co/presbycd" target="_blank" rel="noopener">The Downballot</a>. Le chiamate dei seggi sono quelle di civicAPI, non dell'Associated Press.</footer>
+  <div class="edbar"><b>Modalità redazione</b>
+    <button id="cpThis">Copia iframe di questa scheda</button><button id="cpPage">Copia iframe dello speciale</button><button id="cpScript">Copia script altezza</button><span id="cpMsg"></span></div>
+  <div class="head" id="head"><h1>Midterm Usa 2026, tutti i risultati</h1><span>aggiornato ogni 10 minuti</span></div>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Sezioni dello speciale"></div>
+  <div class="panes" id="panes"></div>
 </div>
 <script>
 const BLOCKS = [
-  { id: "seggi",        file: "midterm-seggi.html",        h: 520, t: "Seggi" },
-  { id: "camera",       file: "midterm-camera.html",       h: 760, t: "Camera" },
-  { id: "senato",       file: "midterm-senato.html",       h: 820, t: "Senato" },
-  { id: "governatori",  file: "midterm-governatori.html",  h: 820, t: "Governatori" },
-  { id: "spostamento",  file: "midterm-spostamento.html",  h: 980, t: "Spostamento rispetto al 2024" }
+  { id: "seggi",       file: "midterm-seggi.html",       h: 520, t: "Seggi" },
+  { id: "camera",      file: "midterm-camera.html",      h: 760, t: "Camera" },
+  { id: "senato",      file: "midterm-senato.html",      h: 820, t: "Senato" },
+  { id: "governatori", file: "midterm-governatori.html", h: 820, t: "Governatori" },
+  { id: "spostamento", file: "midterm-spostamento.html", h: 980, t: "Spostamento" }
 ];
 const q = new URLSearchParams(location.search);
-const editor = q.get("editor") === "1";
-if (editor) document.getElementById("pg").classList.add("editor");
-const base = new URL(".", location.href).href;           /* cartella in cui stanno i blocchi */
-const main = document.getElementById("main");
-const flags = [];
-BLOCKS.forEach((b, i) => {
-  const s = document.createElement("section"); s.id = b.id;
-  const src = base + b.file;
-  s.innerHTML = '<div class="ed"><button type="button">Copia iframe</button><span>' + b.t + '</span></div>' +
-    '<iframe class="midterm-frame" src="' + src + '" style="height:' + b.h + 'px" loading="' + (i < 2 ? "eager" : "lazy") + '" title="Midterm Usa 2026, ' + b.t + '"></iframe>' + (i < BLOCKS.length - 1 ? '<div class="sep"></div>' : "");
-  s.querySelector("button").onclick = () => copy('<iframe class="midterm-frame" src="' + src + '" style="width:100%;border:0;height:' + b.h + 'px" loading="lazy" title="Midterm Usa 2026, ' + b.t + '"></iframe>', "Iframe copiato");
-  main.appendChild(s);
+if (q.get("editor") === "1") document.getElementById("pg").classList.add("editor");
+if (q.get("titolo") === "0") document.getElementById("head").classList.add("off");
+const base = new URL(".", location.href).href;
+const tabsEl = document.getElementById("tabs"), panes = document.getElementById("panes");
+const heights = {}, frames = {};
+let current = null;
+
+BLOCKS.forEach(b => {
+  const btn = document.createElement("button");
+  btn.type = "button"; btn.textContent = b.t; btn.id = "t-" + b.id; btn.setAttribute("role", "tab"); btn.setAttribute("aria-controls", "p-" + b.id);
+  btn.onclick = () => show(b.id, true);
+  tabsEl.appendChild(btn);
 });
+
+function show(id, user){
+  const b = BLOCKS.find(x => x.id === id) || BLOCKS[0];
+  current = b;
+  BLOCKS.forEach(x => {
+    const on = x.id === b.id, btn = document.getElementById("t-" + x.id);
+    btn.classList.toggle("on", on); btn.setAttribute("aria-selected", on ? "true" : "false");
+    if (frames[x.id]) frames[x.id].classList.toggle("on", on);
+  });
+  if (!frames[b.id]){                                   /* il blocco si carica solo la prima volta che lo apri */
+    const f = document.createElement("iframe");
+    f.id = "p-" + b.id; f.src = base + b.file; f.title = "Midterm Usa 2026, " + b.t; f.setAttribute("role", "tabpanel");
+    f.style.height = (heights[b.id] || b.h) + "px"; f.className = "on";
+    panes.appendChild(f); frames[b.id] = f;
+  } else if (heights[b.id]) frames[b.id].style.height = heights[b.id] + "px";
+  try { history.replaceState(null, "", "#" + b.id); } catch (e) {}
+  postSize();
+}
+
+/* altezza: ogni blocco dice la sua; si ignorano i valori da iframe nascosti */
+window.addEventListener("message", e => {
+  if (!e.data || !e.data.midtermBanner || !e.data.height || e.data.height < 120) return;
+  for (const id in frames){
+    if (frames[id].contentWindow === e.source){ heights[id] = e.data.height; frames[id].style.height = e.data.height + "px"; }
+  }
+  postSize();
+});
+
+/* se la pagina è dentro un iframe del sito, comunica la propria altezza totale */
+function postSize(){
+  try{
+    if (window.parent === window) return;
+    const h = Math.ceil(document.getElementById("pg").getBoundingClientRect().height);
+    window.parent.postMessage({ midtermBanner: true, block: "speciale", height: h }, "*");
+  }catch(e){}
+}
+if (window.ResizeObserver) new ResizeObserver(postSize).observe(document.getElementById("pg"));
+
+/* modalità redazione */
 const SCRIPT = '<script>\nwindow.addEventListener("message", function (e) {\n  if (!e.data || !e.data.midtermBanner || !e.data.height) return;\n  document.querySelectorAll("iframe.midterm-frame").forEach(function (f) {\n    if (f.contentWindow === e.source) f.style.height = e.data.height + "px";\n  });\n});\n<\/script>';
+const ifr = (src, h, t) => '<iframe class="midterm-frame" src="' + src + '" style="width:100%;border:0;height:' + h + 'px" loading="lazy" title="' + t + '"></iframe>';
 function copy(txt, msg){
   const done = () => { const m = document.getElementById("cpMsg"); m.textContent = msg; setTimeout(() => m.textContent = "", 2200); };
   if (navigator.clipboard) navigator.clipboard.writeText(txt).then(done, () => prompt("Copia da qui:", txt)); else prompt("Copia da qui:", txt);
 }
+document.getElementById("cpThis").onclick = () => copy(ifr(base + current.file, current.h, "Midterm Usa 2026, " + current.t), "Iframe copiato");
+document.getElementById("cpPage").onclick = () => copy(ifr(base + "midterm-speciale.html", 700, "Midterm Usa 2026, tutti i risultati"), "Iframe copiato");
 document.getElementById("cpScript").onclick = () => copy(SCRIPT, "Script copiato");
 
-/* altezza dei blocchi: ogni iframe comunica la propria */
-window.addEventListener("message", e => {
-  if (!e.data || !e.data.midtermBanner || !e.data.height) return;
-  document.querySelectorAll("iframe.midterm-frame").forEach(f => { if (f.contentWindow === e.source) f.style.height = e.data.height + "px"; });
-});
-
-/* voce di menu attiva mentre si scorre */
-const links = [...document.querySelectorAll("#nav a")];
-function setOn(id){ links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + id)); const a = links.find(x => x.classList.contains("on")); if (a && a.scrollIntoView) { const ul = document.getElementById("nav"); ul.scrollTo({ left: a.offsetLeft - 20, behavior: "smooth" }); } }
-if ("IntersectionObserver" in window){
-  const io = new IntersectionObserver(es => { es.forEach(en => { if (en.isIntersecting) setOn(en.target.id); }); }, { rootMargin: "-45% 0px -50% 0px" });
-  document.querySelectorAll("section").forEach(s => io.observe(s));
-}
-
-/* se la pagina è a sua volta in un iframe, comunica la propria altezza */
-function postSize(){ try{ if (window.parent !== window) window.parent.postMessage({ midtermBanner: true, block: "speciale", height: Math.ceil(document.getElementById("pg").getBoundingClientRect().height) }, "*"); }catch(e){} }
-if (window.ResizeObserver) new ResizeObserver(postSize).observe(document.getElementById("pg"));
+/* scheda iniziale: ?tab=camera oppure #camera */
+const start = (q.get("tab") || location.hash.slice(1) || "seggi");
+show(BLOCKS.some(b => b.id === start) ? start : "seggi");
 </script>
 </body>
 </html>
