@@ -79,6 +79,8 @@
   .foot{position:absolute;right:.9cqw;bottom:.15cqw;font-family:"IBM Plex Mono",monospace;font-size:.58cqw;color:var(--muted);display:flex;gap:.9cqw}
   .foot .key b{display:inline-block;width:.7cqw;height:.7cqw;vertical-align:-.05cqw;margin-right:.25cqw;background:var(--ink);opacity:.55}
   .foot .key b.p{opacity:.25}
+  .foot .more{font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:.78cqw;color:var(--ink);text-decoration:underline;text-underline-offset:.18cqw;white-space:nowrap}
+  .foot .more:hover,.foot .more:focus-visible{color:var(--dem)}
 
   /* ---------- mobile (contenitore sotto i 760px): formato 16:9, layout verticale ---------- */
   @container (max-width: 760px){
@@ -104,6 +106,7 @@
     .tick{top:-.8cqw;bottom:-.8cqw}
     .flips{gap:9cqw}
     .foot{position:static;flex-wrap:wrap;gap:.3cqw 2.4cqw;font-size:1.95cqw}
+    .foot .more{font-size:2.6cqw}
     .foot .key b{width:1.9cqw;height:1.9cqw;margin-right:.7cqw;vertical-align:-.2cqw}
     #src{flex-basis:100%}
   }
@@ -188,6 +191,7 @@
     </section>
 
     <div class="foot">
+      <a class="more" href="https://www.ilfattoquotidiano.it/2026/11/04/midterm-2026-disfatta-repubblicana-notizie/8559872/" target="_blank" rel="noopener">Tutti i dati e le mappe →</a>
       <span id="ts">Caricamento…</span>
       <span class="key"><b></b>assegnati</span>
       <span class="key"><b class="p"></b>in vantaggio</span>
