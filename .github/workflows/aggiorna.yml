@@ -1,7 +1,7 @@
 name: Aggiorna dati Spagna
 on:
   schedule:
-    - cron: "*/5 * * * *"      # GitHub non garantisce la puntualità: in pratica 5-15 min
+    - cron: "*/5 * * * *"
   workflow_dispatch: {}
 permissions:
   contents: write
@@ -11,9 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: python3 aggiorna_dati.py
+      - run: python3 aggiorna_dati.py --config fonte-newtral.json
       - name: Commit se cambiato
         run: |
+          if [ ! -f spagna-data.json ]; then echo "Nessun dato ancora: niente da salvare"; exit 0; fi
           git config user.name "bot"; git config user.email "bot@users.noreply.github.com"
           git add spagna-data.json
           git diff --cached --quiet || (git commit -m "dati: aggiornamento" && git push)
