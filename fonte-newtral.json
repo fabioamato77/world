@@ -1,0 +1,77 @@
+{
+  "_nota": "Il banner non mostra più il Senato: qui si legge solo il Congresso.",
+  "congreso": {
+    "url": "https://newtral-datos.github.io/GENERALES-29N-VIZ/data/resultados29n.json",
+    "file": "",
+    "formato": "json",
+    "percorso": "nacional.partidos",
+    "chiave_nome": "siglas",
+    "chiave_seggi": "escanos",
+    "chiave_pct": "pctVotos"
+  },
+  "senado": {
+    "url": "",
+    "file": "",
+    "formato": "json",
+    "percorso": "nacional.partidos",
+    "chiave_nome": "siglas",
+    "chiave_seggi": "escanos"
+  },
+  "scrutinio": {
+    "percorso": "nacional.pctEscrutado",
+    "_nota": "Opzionale: percorso (es. 'resumen.pctEscrutado') della % scrutinata. Se vuoto, cerco da solo chiavi tipo escrutado/scrutinized."
+  },
+  "intestazioni_http": {
+    "User-Agent": "Mozilla/5.0 (IlFattoQuotidiano elezioni banner)"
+  },
+  "uscita": "spagna-data.json",
+  "totali": {
+    "congress": 350,
+    "senate": 209
+  },
+  "maggioranza": {
+    "congress": 176,
+    "senate": null
+  },
+  "gruppi": {
+    "PP": [
+      "PP"
+    ],
+    "PSOE": [
+      "PSOE"
+    ],
+    "Vox": [
+      "Vox"
+    ],
+    "FA": [
+      "FA",
+      "SUMAR"
+    ]
+  },
+  "colori": {
+    "PP": "#4a7fae",
+    "PSOE": "#b5453f",
+    "Vox": "#76975a",
+    "FA": "#b0597f",
+    "Altri": "#aaa59a"
+  },
+  "ordine_senato": [
+    "PP",
+    "PSOE",
+    "Altri"
+  ],
+  "gruppi_senato": {
+    "PP": [
+      "PP"
+    ],
+    "PSOE": [
+      "PSOE",
+      "SENADO DE PROGRESO",
+      "FA",
+      "SUMAR"
+    ],
+    "Vox": [
+      "Vox"
+    ]
+  }
+}

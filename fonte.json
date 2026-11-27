@@ -1,0 +1,38 @@
+{
+  "_nota": "Unico file da toccare domenica sera. Compila 'url' (o 'file' per prove) e, se serve, i percorsi in 'congreso'/'senado'.",
+
+  "congreso": {
+    "url": "",
+    "file": "",
+    "formato": "auto",
+    "percorso": "",
+    "chiave_nome": "",
+    "chiave_seggi": ""
+  },
+  "senado": {
+    "url": "",
+    "file": "",
+    "formato": "auto",
+    "percorso": "",
+    "chiave_nome": "",
+    "chiave_seggi": ""
+  },
+  "scrutinio": {
+    "percorso": "",
+    "_nota": "Opzionale: percorso (es. 'resumen.pctEscrutado') della % scrutinata. Se vuoto, cerco da solo chiavi tipo escrutado/scrutinized."
+  },
+
+  "intestazioni_http": { "User-Agent": "Mozilla/5.0 (IlFattoQuotidiano elezioni banner)" },
+  "uscita": "spagna-data.json",
+  "totali": { "congress": 350, "senate": null },
+  "maggioranza": { "congress": 176, "senate": null },
+
+  "gruppi": {
+    "PP":    ["pp", "partido popular", "pp-foro", "pp-cs"],
+    "PSOE":  ["psoe", "psc", "psc-psoe", "pse-ee", "psdeg", "psoe-a", "partido socialista obrero espanol", "partit dels socialistes de catalunya"],
+    "Vox":   ["vox"],
+    "Sumar": ["sumar", "sumar-iu", "comuns", "comuns sumar", "iu", "compromis", "mas madrid", "mas pais", "més país", "podemos", "izquierda unida"]
+  },
+  "colori": { "PP": "#4a7fae", "PSOE": "#b5453f", "Vox": "#76975a", "Sumar": "#b0597f", "Altri": "#aaa59a" },
+  "ordine_senato": ["PP", "PSOE", "Altri"]
+}
